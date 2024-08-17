@@ -1,7 +1,16 @@
 @import url('https://fonts.googleapis.com/css?family=Lato:300,400&display=swap');
 
-* {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #fc5d66;
+    --secondary-color: #ffc05a;
+    --light-color: #f9fafb;
+    --dark-color: #272d35;
 }
 
 body {
@@ -13,6 +22,63 @@ body {
     align-items: center;
     justify-content: center;
     margin: 0;
+    line-height: 1.6;
+    scroll-behavior: smooth;
+}
+
+section.rankings {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: space-between;
+    justify-content: center;
+    margin: 5px;
+}
+
+.rank-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: space-between;
+    justify-content: center;
+    margin: 5px;
+    max-width: 1200px;
+}
+
+th {
+    background-color: lightblue;
+    height: 3em;
+}
+
+table, th, td {
+    border: 2px solid blue;
+}
+
+th, td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+table.rankings {
+    border-collapse: collapse;
+    padding: 20px;
+    width: 225px;
+}
+
+/* Section Header */
+.new-info {
+    max-width: 1250px;
+    margin: 0 auto;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+img {
+    max-width: 100%;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
 }
 
 h1 {
@@ -29,10 +95,12 @@ h1 {
     opacity: 0.8;
 }
 
-.header {
+.filter-container {
     background-color: rgb(110, 87, 78);
     color: #fff;
     padding: 10px 20px;
+    border-radius: 10px;
+    margin-bottom: 10px;
 }
 
 .header input {
@@ -125,5 +193,132 @@ h1 {
     white-space: normal; /* Ensure text can wrap */
 }
 
+/* Info section */
+.info-container {
+    background: url('https://media.contentapi.ea.com/content/dam/ea/fc/fc-24/common/gameplay/fc24-euro-keyart-16x9.png.adapt.1456w.png') top center/cover no-repeat;
+    display:flex;
+    opacity: 0.5;
+    width: 900px;
+    height: 500px;
+    margin-top: 10px;
+    border-radius: 10px;
+}
+
+.info-content {
+    background-color: rgb(0, 0, 0);
+    color: #fff;
+    flex: 1;
+    padding: 4rem;
+    border-radius: 10px;
+}
+
+.info-content h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.info-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.info-content ul li {
+    font-size: 1.2rem;
+    line-height: 2;
+}
+
+.info-content i {
+    margin-right: 0.5rem;
+    color: var(--secondary-color);
+}
+
+.info-left {
+    width: 50%;
+}
+
+/* Stats */
+.stats {
+    color: #fff;
+    background-color: rgb(0, 0, 0, 0.9);
+    margin-top: 1rem;
+    border-radius: 10px;
+}
+
+.stats::before {
+    background: #000 url('https://media.contentapi.ea.com/content/dam/ea/fc/fc-24/common/gameplay/fc24-euro-keyart-16x9.png.adapt.1456w.png') center center/cover no-repeat;
+    opacity: 0.3;
+    z-index: 1;
+}
+
+.stats-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1rem;
+}
+
+.stats img {
+    width: 100%;
+    max-width: 150px;
+    margin-right: 0.7rem;
+}
+
+.stats-content {
+    z-index: 2;
+    max-width: 700px;
+}
+
+.stats .stats-numbers {
+    display: flex;
+    gap: 2rem;
+    margin: 1rem 0;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.stats .stats-numbers h3 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.stats .stats-numbers p {
+    font-size: 0.8rem;
+}
+
+.stats .stats-text {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.stats .btn {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    width: 200px;
+}
 
 
+
+/* Media Queries */
+@media(max-width: 1200px) {    
+}
+
+@media(max-width: 992px) {
+    .stats .stats-flex {
+        flex-direction: column;
+        gap: 2rem;
+    }    
+}
+
+@media(max-width: 768px) {    
+}
+
+@media(max-width: 576px) {    
+    .stats .stats-numbers {
+        flex-direction: column;
+    }
+}

@@ -4,6 +4,149 @@ const pokemon_count = 10
 const filter = document.getElementById('filter') 
 const players = []
 
+var top_5_players_overall = []
+
+var overall = 0; // Example value
+
+// Function to dynamically load the variable into the HTML
+function countPlayers() {
+    var allVisiblePlayers = document.querySelectorAll('div.pokemon:not(.hide)')
+
+    overall = allVisiblePlayers.length 
+    console.log("Overall " + allVisiblePlayers.length)
+
+    var overallElement = document.getElementById('overall');
+    if (overallElement) {
+        overallElement.textContent = overall;
+    }
+}
+
+function countAvgOverall() {
+    var allPlayers = document.querySelectorAll('div.pokemon:not(.hide)')
+    
+    // Initialize an empty object to store the counts
+    var avgOverall = 0;
+
+    // Iterate through the elements array
+    allPlayers.forEach(element => {
+        var overallTag = element.querySelector('p.number')
+
+        // Get the inner text of the current element
+        const overall = parseInt(overallTag.innerText, 10)
+            
+        // If the text is already in the object, increment its count
+        avgOverall += overall
+    });
+
+
+    var avgOverallTag = document.getElementById('overallTotal');
+    if (avgOverallTag) {
+        if(allPlayers.length == 0) {
+            avgOverallTag.textContent = 0
+        } else {
+            avgOverallTag.textContent = parseInt(avgOverall / allPlayers.length, 10);
+        }
+    }
+    console.log(avgOverall)
+}
+
+function countAvgAge() {
+    var allPlayers = document.querySelectorAll('div.pokemon:not(.hide)')
+    
+    // Initialize an empty object to store the counts
+    var avgAge = 0;
+
+    // Iterate through the elements array
+    allPlayers.forEach(element => {
+        var ageTag = element.querySelector('span.age')
+
+        // Get the inner text of the current element
+        const age = parseInt(ageTag.innerText, 10)
+            
+        // If the text is already in the object, increment its count
+        avgAge += age
+    });
+
+
+    var avgAgeTag = document.getElementById('avgAge');
+    if (avgAgeTag) {
+        if(allPlayers.length == 0) {
+            avgAgeTag.textContent = 0
+        } else {
+            avgAgeTag.textContent = parseInt(avgAge / allPlayers.length, 10);
+        }
+    }
+    console.log(avgAge)
+}
+
+function countAvgBody() {
+    var allPlayers = document.querySelectorAll('div.pokemon:not(.hide)')
+    
+    // Initialize an empty object to store the counts
+    var avgHeight = 0;
+    var avgWeight = 0;
+
+    // Iterate through the elements array
+    allPlayers.forEach(element => {
+        var heightTag = element.querySelector('span.height')
+        var weightTag = element.querySelector('span.weight')
+
+        // Get the inner text of the current element
+        const height = parseInt(heightTag.innerText, 10)
+        // Get the inner text of the current element
+        const weight = parseInt(weightTag.innerText, 10)
+            
+        // If the text is already in the object, increment its count
+        avgHeight += height
+        avgWeight += weight
+    });
+
+
+    var avgHeightTag = document.getElementById('avgHeight');
+    var avgWeightTag = document.getElementById('avgWeight');
+    if (avgHeightTag) {
+        if(allPlayers.length == 0) {
+            avgHeightTag.textContent = 0
+            avgWeightTag.textContent = 0
+        } else {
+            avgWeightTag.textContent = parseInt(avgWeight / allPlayers.length, 10);
+            avgHeightTag.textContent = parseInt(avgHeight / allPlayers.length, 10);
+        }
+    }
+    console.log(avgHeightTag + "::" + avgWeightTag)
+}
+
+function countTeams() {
+    var allPlayers = document.querySelectorAll('div.pokemon:not(.hide)')
+    
+
+    // Initialize an empty object to store the counts
+    const textCounts = {};
+
+    // Iterate through the elements array
+    allPlayers.forEach(element => {
+        var team = element.querySelector('span.team')
+
+        // Get the inner text of the current element
+        const text = team.innerText;
+            
+        // If the text is already in the object, increment its count
+        if (textCounts[text]) {
+            textCounts[text]++;
+        } else {
+            // If the text is not in the object, add it with a count of 1
+            textCounts[text] = 1;
+        }
+    });
+
+    var teams = document.getElementById('teams');
+    if (teams) {
+        teams.textContent = Object.keys(textCounts).length;
+    }
+}
+
+
+
 filter.addEventListener('input', (e) => 
     filterData(e.target.value))
 
@@ -16,6 +159,8 @@ const fetchPokemons = async () => {
     const data = await res.json()
     console.log(data.items)
     createPokemonCard(data.items)
+
+    console.log(getTopPlayers(data.items))
 }
 
 const createPokemonCard = (pokemons) => {
@@ -47,8 +192,8 @@ const createPokemonCard = (pokemons) => {
             </div>
                 <p style="margin:0;font-size: x-small;">Overall</p>
                 <p class="number">${pokemon.overallRating}</p>
-                <h3 class="name"><small>${pokemon.firstName}</small> ${pokemon.lastName}</h3>
-                <p class="league">${pokemon.leagueName} - ${pokemon.team.label}</p>
+                <h4 class="name"><small>${pokemon.firstName}</small> ${pokemon.lastName}</h4>
+                <p class="league">${pokemon.leagueName} - <span class='team'>${pokemon.team.label}</span></p>
             </div>
             <br>
             <div class="player-info">
@@ -62,9 +207,9 @@ const createPokemonCard = (pokemons) => {
                     </thead>
                     <tbody>
                         <tr>
-                            <td>${age}</td>
-                            <td>${pokemon.height}cm</td>    
-                            <td>${pokemon.weight}kg</td>    
+                            <td><span class='age'>${age}</span></td>
+                            <td><span class='height'>${pokemon.height}</span>cm</td>    
+                            <td><span class='weight'>${pokemon.weight}</span>kg</td>    
                         </tr>
                     </tbody>
                     <table class="table table-dark" style="font-size: x-small; padding: 3px;">
@@ -92,6 +237,12 @@ const createPokemonCard = (pokemons) => {
 
         poke_container.appendChild(pokemonEl)
     }
+
+    countPlayers()
+    countTeams()
+    countAvgOverall()
+    countAvgAge()
+    countAvgBody()
 }
 
 function calculateAge(birthDateString) {
@@ -118,17 +269,51 @@ function calculateAge(birthDateString) {
 }
 
 function filterData(searchTerm) {
+    console.log(searchTerm)
     players.forEach(element => {
-        var names = element.querySelectorAll('h3.name')
-        
-        names.forEach(name => {
-            if(name.innerText.toLowerCase().includes(searchTerm.toLowerCase())) {
-                element.classList.remove('hide')
-            } else {
-                element.classList.add('hide')
-            }    
-        });
+        var namesNl = element.querySelectorAll('h4.name')
+        var teamsNl = element.querySelectorAll('span.team')
+
+        const combined = namesNl[0].innerText + " " + teamsNl[0].innerText
+
+        if(combined.toLowerCase().includes(searchTerm.toLowerCase())) {
+            element.classList.remove('hide')
+        } else {
+            element.classList.add('hide')
+        }    
     });
+
+    countPlayers()
+    countTeams()
+    countAvgOverall()
+    countAvgAge()
+    countAvgBody()
 }
 
+// Function to calculate the average of additional attributes
+function calculateAverage(player) {
+    return (player.stats.pac.value + player.stats.sho.value + player.stats.pas.value + player.stats.dri.value + player.stats.def.value + player.stats.phy.value) / 6;
+}
+
+// Function to get the top 5 players based on overall and average of other attributes
+function getTopPlayers(players) {
+    // Sort players by overall value, and by average of other attributes if overall is the same
+    players.sort((a, b) => {
+        if (b.overallRating !== a.overallRating) {
+            return b.overallRating - a.overallRating;
+        } else {
+            return calculateAverage(b) - calculateAverage(a);
+        }
+    });
+
+    // Get the top 5 players
+    return players.slice(0, 5).map(player => ({
+        name: player.firstName + " " + player.lastName, // ${pokemon.firstName}</small> ${pokemon.lastName}
+        overall: player.overallRating
+    }));
+}
+
+
 fetchPokemons()
+// Call the function when the script is loaded (optional)
+// document.addEventListener('DOMContentLoaded', loadOverall);
